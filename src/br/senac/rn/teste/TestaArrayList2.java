@@ -5,6 +5,7 @@ import java.util.Scanner;
 import br.senac.rn.loja.dao.SexoDAO;
 import br.senac.rn.loja.model.Sexo;
 
+@SuppressWarnings("unused")
 public class TestaArrayList2 {
 
 	public static void main(String[] args) {

@@ -5,15 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import br.senac.rn.conexaodb.ConexaoDB;
 
 import br.senac.rn.loja.model.Sexo;
 
 public class SexoDAO {
 	
-	ConexaoDB conexaodb = new ConexaoDB();
-	
 	public void inserir(Sexo sexo) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		String sql = "INSERT INTO tb_sexos (sex_nome, sex_sigla) VALUES (?,?)";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
@@ -23,9 +21,11 @@ public class SexoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public void remover(Sexo sexo) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		String sql = "DELETE FROM tb_sexos WHERE sex_id = ?";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
@@ -34,9 +34,11 @@ public class SexoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public void editar(Sexo sexo) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		String sql = "UPDATE tb_sexos SET sex_nome = ?, sex_sigla = ? WHERE sex_id = ?";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
@@ -47,9 +49,11 @@ public class SexoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public List<Sexo> buscaTodos() {
+		ConexaoDB conexaodb = new ConexaoDB();
 		List<Sexo> sexos = new ArrayList<Sexo>();
 		String sql = "SELECT * FROM tb_sexos";
 		try {
@@ -63,14 +67,17 @@ public class SexoDAO {
 				sexo.setSigla(result.getString("sex_sigla"));
 				sexos.add(sexo);
 			}
+			conexaodb.fecharConexao();
 			return sexos;
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
-		return null;
+		conexaodb.fecharConexao();
+		return null;		
 	}
 	
 	public Sexo buscaPorId(Integer id) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		Sexo sexo = new Sexo();
 		String sql = "SELECT * FROM tb_sexos WHERE sex_id = ?";
 		try {
@@ -82,13 +89,12 @@ public class SexoDAO {
 				sexo.setNome(result.getString("sex_nome"));
 				sexo.setSigla(result.getString("sex_sigla"));
 			}
+			conexaodb.fecharConexao();
 			return sexo;
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 		return null;
-	}
-	
-	
-	
+	}	
 }

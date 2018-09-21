@@ -5,15 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import br.senac.rn.conexaodb.ConexaoDB;
-
 import br.senac.rn.loja.model.Departamento;
 
 public class DepartamentoDAO {
-	
-	ConexaoDB conexaodb = new ConexaoDB();
-	
 	public void inserir(Departamento dep) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		String sql = "INSERT INTO tb_departamentos (dep_nome, dep_sigla, dep_desconto) values (?,?,?)";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
@@ -24,10 +20,12 @@ public class DepartamentoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public void remover(Departamento dep) {
-		String sql = "DELETE FROM tb_departamento WHERE dep_id = ?";
+		ConexaoDB conexaodb = new ConexaoDB();
+		String sql = "DELETE FROM tb_departamentos WHERE dep_id = ?";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
 			statement.setInt(1, dep.getId());
@@ -35,9 +33,11 @@ public class DepartamentoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public void editar(Departamento dep) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		String sql = "UPDATE tb_departamentos SET dep_nome = ?, dep_sigla = ?, dep_desconto = ? WHERE dep_id = ?";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
@@ -49,9 +49,11 @@ public class DepartamentoDAO {
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 	}
 	
 	public List<Departamento> buscaTodos() {
+		ConexaoDB conexaodb = new ConexaoDB();
 		List<Departamento> deps = new ArrayList<Departamento>();
 		String sql = "SELECT * FROM tb_departamentos";
 		try {
@@ -65,16 +67,19 @@ public class DepartamentoDAO {
 				dep.setDesconto(result.getFloat("dep_desconto"));	
 				deps.add(dep);
 			}
+			conexaodb.fecharConexao();
 			return deps;
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 		return null;
 	}
 	
 	public Departamento buscaPorId(Integer id) {
+		ConexaoDB conexaodb = new ConexaoDB();
 		Departamento dep = new Departamento();
-		String sql = "SELECT * FROM tb_departamento WHERE dep_id = ?";
+		String sql = "SELECT * FROM tb_departamentos WHERE dep_id = ?";
 		try {
 			PreparedStatement statement = conexaodb.getConexao().prepareStatement(sql);
 			statement.setInt(1, id);
@@ -85,10 +90,12 @@ public class DepartamentoDAO {
 				dep.setSigla(result.getString("dep_sigla"));
 				dep.setDesconto(result.getFloat("dep_desconto"));
 			}
+			conexaodb.fecharConexao();
 			return dep;
 		}catch(SQLException exception) {
 			System.out.println("ERRO: " + exception.getMessage());
 		}
+		conexaodb.fecharConexao();
 		return null;
 	}	
 }
